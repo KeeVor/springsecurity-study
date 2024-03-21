@@ -13,9 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * 自定义认证异常处理器
+ */
 @Component
 @Slf4j
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class CustomAuthenticationEntryPointHandler implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException, IOException {

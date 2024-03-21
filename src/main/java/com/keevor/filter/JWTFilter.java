@@ -64,7 +64,7 @@ public class JWTFilter extends OncePerRequestFilter {
         //5.封装用户信息
         //这里选择三个参数的构造方法，表示用户通过验证。则不会被springSecurity再次认证。
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user, null, null);
+                new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
         //6.把用户信息放到SecurityContextHolder，后续过滤器则通过这里获取到认证状态。
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         //7.放行
