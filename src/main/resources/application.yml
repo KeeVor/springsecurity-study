@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  # 配置mysql数据库信息
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/security_study
+    username: root
+    password: 265256
+
+  # 配置redis连接信息
+  redis:
+    port: 6379
+    host: localhost
+    password: root
+
+# 配置sql语句打印输出
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
