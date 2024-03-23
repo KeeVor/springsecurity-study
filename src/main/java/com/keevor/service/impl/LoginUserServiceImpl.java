@@ -41,7 +41,7 @@ public class LoginUserServiceImpl implements UserDetailsService {
         if (user == null){
             //用户不存在
             log.info("用户认证失败，尝试认证用户为:{}",username);
-            throw new CustomException("用户名或密码错误！");
+            throw new CustomException("用户名不存在！");
         }
         //从数据库中查询权限信息
         List<String> roles = roleService.getRoleByUserId(user.getId());

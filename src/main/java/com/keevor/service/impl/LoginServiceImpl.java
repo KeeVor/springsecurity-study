@@ -1,6 +1,7 @@
 package com.keevor.service.impl;
 
 import cn.hutool.json.JSONUtil;
+import com.keevor.common.CustomException;
 import com.keevor.domain.LoginUser;
 import com.keevor.domain.R;
 import com.keevor.domain.User;
@@ -9,9 +10,13 @@ import com.keevor.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -38,10 +43,16 @@ public class LoginServiceImpl implements LoginService {
                 user.getUsername(),user.getPassword()   //使用UsernamePasswordAuthenticationToken实现类
         );
         //传入校验对象
-        Authentication authenticate = authenticationManager.authenticate(authenticationToken);
-        if (authenticate == null){
+        Authentication authenticate = null;
+        try {
+            authenticate = authenticationManager.authenticate(authenticationToken);
+        } catch (AuthenticationException e) {
+            if (e instanceof AuthenticationServiceException && e.getMessage().contains("用户名不存在")){
+                //用户不存在
+                throw new CustomException("用户不存在！");
+            }
             //认证失败
-            throw new RuntimeException("用户名或密码错误！");
+            throw new CustomException("用户名或者密码错误！");
         }
         //获取用户信息
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
